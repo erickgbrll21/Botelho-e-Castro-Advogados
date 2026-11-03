@@ -111,12 +111,12 @@ export default function HomePage() {
             <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-black/45">Sobre nós</p>
             <h2 className="h-serif mt-5 text-[clamp(2.7rem,5vw,5rem)] leading-[1.02]">De Minas Gerais para todo o Brasil.</h2>
             <p className="mt-7 text-lg leading-relaxed text-black/70">
-              Fundado há mais de 25 anos, o <strong className="font-semibold text-black">Botelho e Castro Advogados</strong> é um
-              dos escritórios mais respeitados de Minas Gerais e referência em serviços jurídicos de excelência.
+              A <strong className="font-semibold text-black">Botelho e Castro Advogados</strong> consolidou sua trajetória no
+              mercado jurídico combinando experiência de mais de duas décadas e atuação estratégica em grandes projetos.
             </p>
             <p className="mt-4 leading-relaxed text-black/60">
-              Nossa equipe atua de forma integrada na estruturação jurídica de grandes projetos e em demandas
-              preventivas e contenciosas, nas esferas administrativa e judicial.
+              O foco em soluções integradas — que unem a segurança do preventivo à força do contencioso — posiciona o
+              escritório como um parceiro robusto para empresas que enfrentam ambientes regulatórios e judiciais complexos.
             </p>
             <ul className="mt-8 grid gap-3 sm:grid-cols-2">
               {["Atendimento personalizado", "Equipe multidisciplinar", "Estratégia integrada", "Comunicação transparente"].map((item) => (

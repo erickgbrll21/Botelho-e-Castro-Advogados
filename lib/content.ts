@@ -10,6 +10,7 @@ export const site = {
     "De Minas Gerais para todo o Brasil. Escritório com mais de 25 anos de atuação, mais de 300 mil processos conduzidos e presença em todo território nacional.",
   contact: {
     email: "contato@bcadvogados.adv.br",
+    careersEmail: "dpcoordenacao@bcconsultores.adv.br",
     phonePrimary: "(31) 3295-0497",
     phoneSecondary: "(31) 9 8246-5979",
     whatsapp: "(31) 9 8561-4005",
@@ -363,6 +364,14 @@ export const team: TeamMember[] = [
       "Bacharel em Direito pelas Faculdades Integradas Vianna Júnior – OAB/MG 207.116.",
       "Bacharel em Ciências Humanas pela Universidade Federal de Juiz de Fora.",
       "Pós-graduando em Direito do Trabalho e Direito Previdenciário pela Pontifícia Universidade Católica de Minas Gerais (PUC Minas).",
+    ],
+  },
+  {
+    slug: "erick-gabriel-prado-rezende",
+    name: "Erick Gabriel Prado Rezende",
+    role: "Analista de Sistemas",
+    bio: [
+      "Formado em Análise e Desenvolvimento de Sistemas pela Faculdade UNA Contagem.",
     ],
   },
 ];

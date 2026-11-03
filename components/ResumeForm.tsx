@@ -1,75 +1,46 @@
 "use client";
 
-import { FormEvent, useRef, useState } from "react";
+import type { FormEvent } from "react";
+import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
+import { site } from "@/lib/content";
 
-const MAX_PDF_BYTES = 10 * 1024 * 1024;
+function openEmail(event: FormEvent<HTMLFormElement>) {
+  event.preventDefault();
+  const data = new FormData(event.currentTarget);
+  const nome = String(data.get("nome") ?? "").trim();
+  const whatsapp = String(data.get("whatsapp") ?? "").trim();
+  const area = String(data.get("area") ?? "").trim();
+
+  const subject = `Candidatura — ${nome} (${area})`;
+  const body = [
+    "Olá, gostaria de enviar meu currículo para o Botelho e Castro Advogados.",
+    "",
+    `Nome: ${nome}`,
+    `WhatsApp: ${whatsapp}`,
+    `Área de interesse: ${area}`,
+    "",
+    "Anexei o currículo a este e-mail.",
+  ].join("\n");
+
+  window.location.href = `mailto:${site.contact.careersEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+}
 
 export function ResumeForm() {
-  const formRef = useRef<HTMLFormElement>(null);
-  const [error, setError] = useState("");
-  const [sending, setSending] = useState(false);
-  const [success, setSuccess] = useState(false);
-
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    if (sending) return;
-
-    const form = formRef.current;
-    if (!form) return;
-
-    const file = (form.elements.namedItem("curriculo") as HTMLInputElement | null)?.files?.[0];
-    if (!file) {
-      setError("Anexe o currículo em PDF.");
-      setSuccess(false);
-      return;
-    }
-    if (file.type !== "application/pdf") {
-      setError("O currículo deve estar em PDF.");
-      setSuccess(false);
-      return;
-    }
-    if (file.size > MAX_PDF_BYTES) {
-      setError("O PDF deve ter no máximo 10 MB.");
-      setSuccess(false);
-      return;
-    }
-
-    setSending(true);
-    setError("");
-    setSuccess(false);
-
-    try {
-      const response = await fetch("/api/curriculo", {
-        method: "POST",
-        body: new FormData(form),
-      });
-      const payload = (await response.json().catch(() => null)) as { error?: string } | null;
-
-      if (!response.ok) {
-        throw new Error(payload?.error || "Não foi possível enviar o currículo. Tente novamente.");
-      }
-
-      form.reset();
-      setSuccess(true);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Não foi possível enviar o currículo. Tente novamente.");
-    } finally {
-      setSending(false);
-    }
-  }
-
   return (
     <form
-      ref={formRef}
       className="col-span-12 bg-black p-5 text-white sm:p-8 md:col-span-6 md:col-start-7 md:p-12"
-      onSubmit={handleSubmit}
+      onSubmit={openEmail}
     >
       <div className="flex justify-between border-t border-white/40 pt-4 text-[10px] uppercase tracking-[0.25em] text-white/50">
         <span>02 / Cadastro</span>
         <span>Currículo</span>
       </div>
       <h2 className="h-serif mt-8 text-4xl text-white md:text-5xl">Preencha o formulário</h2>
+      <p className="mt-6 border-l border-white/40 pl-5 text-sm leading-relaxed text-white/70">
+        Ao enviar, o e-mail será aberto com seus dados.{" "}
+        <strong className="font-semibold text-white">Anexe o currículo à mensagem</strong> antes de disparar.
+      </p>
 
       <div className="mt-8 grid grid-cols-1 gap-5">
         <label className="block">
@@ -89,26 +60,19 @@ export function ResumeForm() {
             <option>Direito Licitatório</option>
           </select>
         </label>
-        <label className="block">
-          <span className="text-[10px] uppercase tracking-[0.22em] text-white/55">Currículo (PDF, até 10&nbsp;MB)</span>
-          <input required type="file" accept="application/pdf" name="curriculo" className="mt-3 w-full text-sm text-white/70" />
-        </label>
       </div>
-
-      {error ? (
-        <p role="alert" aria-live="assertive" className="mt-6 text-xs text-red-300">{error}</p>
-      ) : success ? (
-        <p role="status" aria-live="polite" className="mt-6 text-xs text-white">Currículo enviado. Entraremos em contato em breve.</p>
-      ) : null}
 
       <button
         type="submit"
-        disabled={sending}
-        aria-busy={sending}
-        className="mt-10 inline-flex min-h-12 items-center gap-3 border border-white bg-white px-7 py-4 text-[11px] uppercase tracking-[0.2em] text-black transition-colors hover:bg-black hover:text-white disabled:cursor-wait disabled:opacity-60"
+        className="mt-10 inline-flex min-h-12 items-center gap-3 border border-white bg-white px-7 py-4 text-[11px] uppercase tracking-[0.2em] text-black transition-colors hover:bg-black hover:text-white"
       >
-        {sending ? "Enviando…" : "Enviar currículo"} <ArrowUpRight size={16} aria-hidden="true" />
+        Enviar por e-mail <ArrowUpRight size={16} aria-hidden="true" />
       </button>
+      <p className="mt-6 text-xs leading-relaxed text-white/50">
+        Ao enviar, você será direcionado ao e-mail {site.contact.careersEmail}. Anexe o currículo na mensagem. Ao continuar, você
+        concorda com nossa{" "}
+        <Link href="/politica-de-privacidade" className="underline hover:text-white">Política de Privacidade</Link>.
+      </p>
     </form>
   );
 }
